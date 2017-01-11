@@ -18,5 +18,5 @@ public class CameraActivity extends Activity {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
-    
+
 }
