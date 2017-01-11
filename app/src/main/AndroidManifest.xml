@@ -9,6 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-feature android:name="android.hardware.camera" android:required="true" />
+        <uses-permission android:name="android.permission.CAMERA" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
