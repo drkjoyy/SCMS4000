@@ -72,7 +72,6 @@ public class CameraActivity extends Activity {
         imgCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgResult = screenShot(mCameraView);
                 mCamera.takePicture(null, null, mPicture);
                 System.out.println("TOOK THE IMAGE");
                 //Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
