@@ -66,8 +66,6 @@ public class CameraActivity extends Activity {
             public void onClick(View view) {
                 mCamera.takePicture(null, null, mPicture);
                 System.out.println("TOOK THE IMAGE");
-                //Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-                //CameraActivity.this.startActivity(intent);
             }
         });
     }
