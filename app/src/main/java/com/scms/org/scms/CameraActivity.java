@@ -35,7 +35,7 @@ public class CameraActivity extends Activity {
         setContentView(R.layout.camera);
 
         try{
-            mCamera = Camera.open();//you can use open(int) to use different cameras
+            mCamera = Camera.open(1);//you can use open(int) to use different cameras
         } catch (Exception e){
             Log.d("ERROR", "Failed to get camera: " + e.getMessage());
         }
