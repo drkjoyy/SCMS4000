@@ -1,0 +1,8 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="camera_mode_key"
+        android:title="Use Camera"
+        android:entries="@array/camera"
+        android:entryValues="@array/cameraInt"
+        android:defaultValue="@string/cameraDefault" />
+</PreferenceScreen>

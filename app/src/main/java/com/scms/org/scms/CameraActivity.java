@@ -10,12 +10,14 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,19 +27,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class CameraActivity extends Activity {
+    private static final String TAG = "CameraActivity";
     private Camera mCamera = null;
     private CameraView mCameraView = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static Bitmap imgResult = null;
+    static final String MEDIA_FILE = "mediafile";
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera);
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        try{
-            mCamera = Camera.open(1);//you can use open(int) to use different cameras
+        try {
+            int cameraMode = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_CAMERA, "0"));
+            mCamera = Camera.open(cameraMode);
         } catch (Exception e){
-            Log.d("ERROR", "Failed to get camera: " + e.getMessage());
+            Log.d(TAG, "Failed to get camera: " + e.getMessage());
+            setResult(RESULT_CANCELED);
+            finish();
         }
 
         if(mCamera != null) {
@@ -51,7 +60,8 @@ public class CameraActivity extends Activity {
         imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.exit(0);
+                setResult(RESULT_CANCELED);
+                finish();
             }
         });
         //ImageView img = (ImageView) findViewById(R.id.imgResult);
@@ -66,21 +76,26 @@ public class CameraActivity extends Activity {
             public void onClick(View view) {
                 mCamera.takePicture(null, null, mPicture);
                 System.out.println("TOOK THE IMAGE");
+                finish();
             }
         });
     }
 
-    Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+    private final Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile();
             if (pictureFile == null) {
+                setResult(RESULT_CANCELED);
                 return;
             }
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
+                Intent returnedData = new Intent();
+                returnedData.putExtra(MEDIA_FILE, pictureFile);
+                setResult(RESULT_OK, returnedData);
             } catch (FileNotFoundException e) {
 
             } catch (IOException e) {
@@ -93,18 +108,16 @@ public class CameraActivity extends Activity {
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 "MyCameraApp");
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
+        if (!mediaStorageDir.mkdirs()) { // mkdirs() checks for exists() first.
+            Log.d(TAG, "failed to create directory");
+            return null;
         }
+
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
                 .format(new Date());
         File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".jpg");
+        mediaFile = new File(mediaStorageDir, "IMG_" + timeStamp + ".jpg");
 
         return mediaFile;
     }
