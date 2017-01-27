@@ -32,7 +32,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:id="@+id/redReference"
-        android:src="@drawable/red"
+        android:src="@color/red"
         android:layout_gravity="center" />
 
     <ImageView
@@ -40,14 +40,14 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:id="@+id/blueReference"
-        android:src="@drawable/blue"
+        android:src="@color/blue"
         android:layout_gravity="center" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:id="@+id/greenReference"
-        android:src="@drawable/green"
+        android:src="@color/green"
         android:layout_gravity="center"
         />
 
