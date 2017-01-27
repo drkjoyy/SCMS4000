@@ -10,5 +10,5 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-    <string name="cameraDefault">0</string> <!-- The default index of cameraInt -->
+    <string name="cameraDefault">1</string> <!-- The default index of cameraInt -->
 </resources>

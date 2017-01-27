@@ -14,25 +14,28 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 public class CameraActivity extends Activity {
     private static final String TAG = "CameraActivity";
     private Camera mCamera = null;
     private CameraView mCameraView = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static Bitmap imgResult = null;
     static final String MEDIA_FILE = "mediafile";
     ImageView redReference;
     ImageView greenReference;
@@ -46,6 +49,7 @@ public class CameraActivity extends Activity {
 
         try {
             int cameraMode = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_CAMERA, "0"));
+            System.out.println("CAMERA MODE IS: " + cameraMode);
             mCamera = Camera.open(cameraMode);
         } catch (Exception e){
             Log.d(TAG, "Failed to get camera: " + e.getMessage());
@@ -68,12 +72,7 @@ public class CameraActivity extends Activity {
                 finish();
             }
         });
-        //ImageView img = (ImageView) findViewById(R.id.imgResult);
-        //img.setImageResource(R.drawable.demo_level_planet);
-        //img.setImageBitmap(R.drawable.demo_level_planet);
-        //img.getLayoutParams().height = 200;
-        //img.getLayoutParams().width = 200;
-        //btn to capture photo
+
         Button imgCapture = (Button)findViewById(R.id.capture);
         imgCapture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +83,10 @@ public class CameraActivity extends Activity {
 
         redReference = (ImageView)findViewById(R.id.redReference);
         redReference.setAlpha(0);
+
         greenReference = (ImageView)findViewById(R.id.greenReference);
         greenReference.setAlpha(0);
+
         blueReference = (ImageView)findViewById(R.id.blueReference);
         blueReference.setAlpha(0);
 
